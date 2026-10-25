@@ -32,6 +32,19 @@ public final class ContagionConfig {
 	public static double contactMultiplier = 1.0;
 	public static boolean villagersCanCatch = true;
 
+	/** The pathogen lives in the world: some animals and villagers carry it when they are first loaded. */
+	public static boolean worldInfection = true;
+	/** Chance that a farm animal (cow, pig, sheep, chicken, rabbit, goat) is a carrier when first loaded. */
+	public static double animalCarrierChance = 0.04;
+	/** Chance that a villager is already infected when first loaded. */
+	public static double villagerCarrierChance = 0.01;
+	/** Farm animals can catch it from each other and from players. */
+	public static boolean animalsCanCatch = true;
+	/** Sick animals are ill for this many days after incubation, then recover (immune) or die. */
+	public static int animalIllnessDays = 3;
+	/** Chance that a sick animal dies at the end of its illness instead of recovering. */
+	public static double animalDeathChance = 0.3;
+
 	/** Sleeping through the night also advances the disease, because time really passes. */
 	public static boolean sleepAdvancesDisease = true;
 	public static long sleepSkipTicks = 10000;
@@ -77,6 +90,12 @@ public final class ContagionConfig {
 		airborneMultiplier = getDouble(props, "airborne_multiplier", airborneMultiplier);
 		contactMultiplier = getDouble(props, "contact_multiplier", contactMultiplier);
 		villagersCanCatch = getBool(props, "villagers_can_catch", villagersCanCatch);
+		worldInfection = getBool(props, "world_infection", worldInfection);
+		animalCarrierChance = getDouble(props, "animal_carrier_chance", animalCarrierChance);
+		villagerCarrierChance = getDouble(props, "villager_carrier_chance", villagerCarrierChance);
+		animalsCanCatch = getBool(props, "animals_can_catch", animalsCanCatch);
+		animalIllnessDays = (int) Math.max(1, getLong(props, "animal_illness_days", animalIllnessDays));
+		animalDeathChance = getDouble(props, "animal_death_chance", animalDeathChance);
 		sleepAdvancesDisease = getBool(props, "sleep_advances_disease", sleepAdvancesDisease);
 		sleepSkipTicks = getLong(props, "sleep_skip_ticks", sleepSkipTicks);
 		analysisTicks = getLong(props, "analysis_ticks", analysisTicks);

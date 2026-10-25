@@ -160,14 +160,6 @@ public final class LabInteractions {
 			return InteractionResult.SUCCESS;
 		}
 
-		if (stack.is(ModItems.THERMOMETER)) {
-			if (sp != null) {
-				sp.sendSystemMessage(Lab.temperatureReading(sp, true));
-			}
-
-			return InteractionResult.SUCCESS;
-		}
-
 		if (stack.is(ModItems.RESEARCH_JOURNAL)) {
 			if (sp != null) {
 				ServerLevel serverLevel = (ServerLevel) level;
@@ -175,7 +167,7 @@ public final class LabInteractions {
 				if (player.isShiftKeyDown()) {
 					Journal.show(serverLevel.getServer(), sp);
 				} else {
-					Journal.open(serverLevel.getServer(), sp, stack, hand);
+					Journal.open(serverLevel.getServer(), sp);
 				}
 
 				Vanilla.playSound(serverLevel, sp, "item.book.page_turn", 1.0F, 1.0F);
@@ -240,11 +232,7 @@ public final class LabInteractions {
 		}
 
 		if (stack.is(ModItems.THERMOMETER)) {
-			if (sp != null) {
-				sp.sendSystemMessage(Lab.temperatureReading(target, false));
-			}
-
-			return InteractionResult.SUCCESS;
+			return player.isUsingItem() ? InteractionResult.PASS : ThermometerItem.useOn(player, hand, target);
 		}
 
 		return InteractionResult.PASS;

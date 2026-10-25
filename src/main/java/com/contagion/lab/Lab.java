@@ -275,28 +275,20 @@ public final class Lab {
 		return temp;
 	}
 
-	public static Component temperatureReading(LivingEntity entity, boolean self) {
-		double c = temperature(entity);
-		double f = c * 9.0 / 5.0 + 32.0;
-		String label;
-		ChatFormatting color;
+	/** 0 = normal, 1 = elevated, 2 = fever, 3 = high fever, 4 = dangerous. */
+	public static int temperatureLevel(double c) {
+		return c < 37.3 ? 0 : c < 38.0 ? 1 : c < 39.0 ? 2 : c < 40.0 ? 3 : 4;
+	}
 
-		if (c < 37.3) {
-			label = "normal";
-			color = ChatFormatting.GREEN;
-		} else if (c < 38.0) {
-			label = "elevated";
-			color = ChatFormatting.YELLOW;
-		} else if (c < 39.0) {
-			label = "fever";
-			color = ChatFormatting.GOLD;
-		} else if (c < 40.0) {
-			label = "high";
-			color = ChatFormatting.RED;
-		} else {
-			label = "danger";
-			color = ChatFormatting.DARK_RED;
-		}
+	public static final String[] TEMPERATURE_LABELS = {"normal", "elevated", "fever", "high", "danger"};
+	public static final ChatFormatting[] TEMPERATURE_COLORS = {ChatFormatting.GREEN, ChatFormatting.YELLOW, ChatFormatting.GOLD, ChatFormatting.RED,
+			ChatFormatting.DARK_RED};
+
+	public static Component temperatureReading(LivingEntity entity, boolean self, double c) {
+		double f = c * 9.0 / 5.0 + 32.0;
+		int level = temperatureLevel(c);
+		String label = TEMPERATURE_LABELS[level];
+		ChatFormatting color = TEMPERATURE_COLORS[level];
 
 		// Gauge from 35.5 to 41.5 °C, ten segments.
 		int segments = (int) Math.round(Math.max(0, Math.min(1, (c - 35.5) / 6.0)) * 10);

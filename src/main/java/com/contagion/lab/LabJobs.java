@@ -1,5 +1,8 @@
 package com.contagion.lab;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.ChatFormatting;
@@ -54,6 +57,8 @@ public final class LabJobs {
 		if (find(research, level, pos) != null) {
 			Strains.setResearch(server, remove(research, level, pos));
 		}
+
+		Microscope.forget(level, pos);
 	}
 
 	/** Once per second: lamps, bubbles, and "it's done" notifications. */
@@ -66,6 +71,7 @@ public final class LabJobs {
 
 		long now = Lab.now(server);
 		Research updated = research;
+		List<Runnable> broadcasts = new ArrayList<>();
 
 		for (PendingTest test : research.pending()) {
 			ServerLevel level = levelOf(server, test.dimension());
@@ -101,6 +107,7 @@ public final class LabJobs {
 				BeakerBlock.setContents(level, pos, BeakerBlock.DONE);
 			} else {
 				MicroscopeBlock.setStatus(level, pos, MicroscopeBlock.READY);
+				broadcasts.add(() -> Microscope.broadcast(level, pos));
 			}
 
 			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
@@ -116,6 +123,9 @@ public final class LabJobs {
 		if (updated != research) {
 			Strains.setResearch(server, updated);
 		}
+
+		// Anyone looking through a microscope that just finished sees it right away.
+		broadcasts.forEach(Runnable::run);
 	}
 
 	private static @Nullable ServerLevel levelOf(MinecraftServer server, String dimension) {

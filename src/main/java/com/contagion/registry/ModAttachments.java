@@ -1,5 +1,7 @@
 package com.contagion.registry;
 
+import com.mojang.serialization.Codec;
+
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 
@@ -11,6 +13,9 @@ import com.contagion.data.Strain;
 public final class ModAttachments {
 	/** Disease state on a living entity. Not copied on death. */
 	public static final AttachmentType<Infection> INFECTION = AttachmentRegistry.createPersistent(ContagionMod.id("infection"), Infection.CODEC);
+
+	/** Set once an entity was checked for being a natural carrier (so it is only rolled once). */
+	public static final AttachmentType<Boolean> SCREENED = AttachmentRegistry.createPersistent(ContagionMod.id("screened"), Codec.BOOL);
 
 	/** The world's strain, on {@code server.globalAttachments()}. Absent until the first infection. */
 	public static final AttachmentType<Strain> STRAIN = AttachmentRegistry.createPersistent(ContagionMod.id("strain"), Strain.CODEC);

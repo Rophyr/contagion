@@ -102,7 +102,7 @@ public final class Disease {
 		return Msg.of("contagion.load." + Math.max(0, Math.min(5, load)));
 	}
 
-	/** Natural transmission targets: survival players and (optionally) villagers. */
+	/** Natural transmission targets: survival players and (optionally) villagers and farm animals. */
 	public static boolean canCatch(Entity entity) {
 		if (!(entity instanceof LivingEntity living) || !living.isAlive()) {
 			return false;
@@ -112,7 +112,8 @@ public final class Disease {
 			if (player.isSpectator() || player.isCreative()) {
 				return false;
 			}
-		} else if (!(ContagionConfig.villagersCanCatch && entity instanceof AbstractVillager)) {
+		} else if (!(ContagionConfig.villagersCanCatch && entity instanceof AbstractVillager)
+				&& !(ContagionConfig.animalsCanCatch && WorldInfection.isLivestock(entity))) {
 			return false;
 		}
 

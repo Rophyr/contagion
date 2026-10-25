@@ -21,7 +21,8 @@ import com.contagion.registry.ModItems;
  * <ul>
  *     <li>Airborne: standing close to a contagious host, worse the sicker they are (masks help a lot).</li>
  *     <li>Coughing/sneezing: a burst aimed at whoever is in front of the host.</li>
- *     <li>Contact: getting hit by an infected host, or punching one bare-handed.</li>
+ *     <li>Contact: getting hit by an infected host, or hitting one (worst bare-handed).</li>
+ *     <li>Food: eating meat from an infected animal (see {@link TaintedFoodItem}).</li>
  * </ul>
  * Hosts are contagious from halfway through incubation, before they show any symptoms.
  */
@@ -55,9 +56,9 @@ public final class Transmission {
 				Disease.infect(level.getServer(), victim, false);
 			}
 
-			// Punching an infected host bare-handed.
-			if (attacker instanceof Player && attacker.getMainHandItem().isEmpty()
-					&& Disease.isContagious(Disease.get(victim)) && Disease.canCatch(attacker) && random.nextDouble() < 0.04 * contact) {
+			// Hitting an infected host (animal, villager or player): bare-handed is much riskier than with a weapon.
+			if (attacker instanceof Player && Disease.isContagious(Disease.get(victim)) && Disease.canCatch(attacker)
+					&& random.nextDouble() < (attacker.getMainHandItem().isEmpty() ? 0.10 : 0.03) * contact) {
 				Disease.infect(level.getServer(), attacker, false);
 			}
 		});
@@ -69,6 +70,11 @@ public final class Transmission {
 		}
 
 		double base = AIRBORNE_BASE * strain.airborne() * ContagionConfig.airborneMultiplier * stageFactor(infection) * maskFactor(source, 0.3);
+
+		// Animals shed less than people, but herds stand close together.
+		if (WorldInfection.isLivestock(source)) {
+			base *= 0.5;
+		}
 
 		if (base <= 0) {
 			return;

@@ -10,6 +10,9 @@ import net.fabricmc.api.ModInitializer;
 import com.contagion.command.ContagionCommands;
 import com.contagion.disease.DiseaseTicker;
 import com.contagion.disease.Transmission;
+import com.contagion.disease.WorldInfection;
+import com.contagion.network.ModNetworking;
+import com.contagion.registry.ModMenus;
 import com.contagion.lab.LabInteractions;
 import com.contagion.registry.ModAttachments;
 import com.contagion.registry.ModBlocks;
@@ -36,6 +39,9 @@ public final class ContagionMod implements ModInitializer {
 		LabInteractions.register();
 		DiseaseTicker.register();
 		Transmission.register();
+		WorldInfection.register();
+		ModMenus.init();
+		ModNetworking.init();
 		ContagionCommands.register();
 
 		LOGGER.info("Contagion loaded. Stay healthy.");

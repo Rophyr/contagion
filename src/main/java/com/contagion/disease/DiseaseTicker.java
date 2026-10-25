@@ -159,6 +159,10 @@ public final class DiseaseTicker {
 
 		entity.setAttached(ModAttachments.INFECTION, updated);
 
+		if (WorldInfection.isLivestock(entity) && WorldInfection.tickAnimal(level, entity, updated)) {
+			return;
+		}
+
 		if (entity instanceof ServerPlayer player) {
 			if (wasInRemission && remission == 0) {
 				Chat.send(player, Msg.of("contagion.stage.relief_fading"), ChatFormatting.GRAY, ChatFormatting.ITALIC);

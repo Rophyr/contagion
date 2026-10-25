@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": "contagion:tainted_beef",
+  "result": {
+    "id": "contagion:tainted_cooked_beef"
+  }
+}

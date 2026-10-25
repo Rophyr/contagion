@@ -184,7 +184,8 @@ public final class Symptoms {
 			cough(level, entity, strain);
 		}
 
-		if (stage.ordinal() >= Disease.Stage.SEVERE.ordinal() && !remission) {
+		// Sick animals are listless from the start; people only once it gets severe.
+		if (!remission && (stage.ordinal() >= Disease.Stage.SEVERE.ordinal() || WorldInfection.isLivestock(entity) && random.nextInt(3) == 0)) {
 			Vanilla.addEffect(entity, "slowness", 60, 0);
 		}
 
