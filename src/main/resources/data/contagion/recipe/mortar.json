@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:flint",
+    "#minecraft:stone_crafting_materials"
+  ],
+  "result": {
+    "count": 1,
+    "id": "contagion:mortar"
+  }
+}

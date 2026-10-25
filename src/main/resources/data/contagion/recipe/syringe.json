@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "P": "minecraft:glass_pane",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "  N",
+    " P ",
+    "I  "
+  ],
+  "result": {
+    "count": 4,
+    "id": "contagion:syringe"
+  }
+}

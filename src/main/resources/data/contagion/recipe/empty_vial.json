@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "P": "minecraft:glass_pane"
+  },
+  "pattern": [
+    " N ",
+    "P P",
+    " P "
+  ],
+  "result": {
+    "count": 3,
+    "id": "contagion:empty_vial"
+  }
+}

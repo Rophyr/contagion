@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "contagion:item/serum_liquid_1",
+    "layer1": "contagion:item/serum_glass_open"
+  }
+}

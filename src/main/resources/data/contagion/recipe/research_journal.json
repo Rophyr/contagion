@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:paper",
+    "#minecraft:coals"
+  ],
+  "result": {
+    "count": 1,
+    "id": "contagion:research_journal"
+  }
+}

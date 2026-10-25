@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,status=0": {
+      "model": "contagion:block/microscope"
+    },
+    "facing=north,status=1": {
+      "model": "contagion:block/microscope_working"
+    },
+    "facing=north,status=2": {
+      "model": "contagion:block/microscope_ready"
+    },
+    "facing=east,status=0": {
+      "model": "contagion:block/microscope",
+      "y": 90
+    },
+    "facing=east,status=1": {
+      "model": "contagion:block/microscope_working",
+      "y": 90
+    },
+    "facing=east,status=2": {
+      "model": "contagion:block/microscope_ready",
+      "y": 90
+    },
+    "facing=south,status=0": {
+      "model": "contagion:block/microscope",
+      "y": 180
+    },
+    "facing=south,status=1": {
+      "model": "contagion:block/microscope_working",
+      "y": 180
+    },
+    "facing=south,status=2": {
+      "model": "contagion:block/microscope_ready",
+      "y": 180
+    },
+    "facing=west,status=0": {
+      "model": "contagion:block/microscope",
+      "y": 270
+    },
+    "facing=west,status=1": {
+      "model": "contagion:block/microscope_working",
+      "y": 270
+    },
+    "facing=west,status=2": {
+      "model": "contagion:block/microscope_ready",
+      "y": 270
+    }
+  }
+}

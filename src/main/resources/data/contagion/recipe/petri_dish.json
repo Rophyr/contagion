@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "K": "minecraft:dried_kelp",
+    "P": "minecraft:glass_pane"
+  },
+  "pattern": [
+    " K ",
+    "PPP"
+  ],
+  "result": {
+    "count": 3,
+    "id": "contagion:petri_dish"
+  }
+}

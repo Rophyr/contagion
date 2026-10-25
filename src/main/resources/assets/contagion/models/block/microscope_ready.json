@@ -1,0 +1,6 @@
+{
+  "parent": "contagion:block/microscope",
+  "textures": {
+    "lamp": "contagion:block/microscope_lamp_ready"
+  }
+}

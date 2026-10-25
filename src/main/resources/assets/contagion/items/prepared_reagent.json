@@ -1,0 +1,33 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "contagion:item/prepared_extract",
+      "tints": [
+        {
+          "type": "minecraft:custom_model_data",
+          "index": 0,
+          "default": -1
+        },
+        {
+          "type": "minecraft:constant",
+          "value": -1
+        }
+      ]
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "contagion:item/prepared_powder",
+      "tints": [
+        {
+          "type": "minecraft:custom_model_data",
+          "index": 0,
+          "default": -1
+        }
+      ]
+    }
+  }
+}

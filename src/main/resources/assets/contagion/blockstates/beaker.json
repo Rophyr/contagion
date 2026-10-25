@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "contents=0": {
+      "model": "contagion:block/beaker_empty"
+    },
+    "contents=1": {
+      "model": "contagion:block/beaker_water"
+    },
+    "contents=2": {
+      "model": "contagion:block/beaker_boiling"
+    },
+    "contents=3": {
+      "model": "contagion:block/beaker_done"
+    }
+  }
+}
