@@ -24,6 +24,7 @@ import com.contagion.data.Infection;
 import com.contagion.data.SerumMix;
 import com.contagion.data.Strain;
 import com.contagion.disease.Disease;
+import com.contagion.disease.Ingredient;
 import com.contagion.disease.Strains;
 import com.contagion.disease.WorldInfection;
 import com.contagion.lab.Journal;
@@ -103,6 +104,10 @@ public final class ContagionClientGameTest implements FabricClientGameTest {
 				List<String> reagents = new ArrayList<>(strain.cure().subList(0, 2));
 				reagents.add(strain.toxic().getFirst() + ":RAW");
 				Lab.updateSerumStack(serum, new SerumMix(List.copyOf(reagents), true));
+
+				for (Ingredient ingredient : Ingredient.parseAll(reagents)) {
+					Lab.noteTried(server, ingredient);
+				}
 				player.containerMenu.getSlot(MicroscopeMenu.SLIDE_SLOT).set(Lab.culture(data, now));
 				player.containerMenu.getSlot(MicroscopeMenu.SERUM_SLOT).set(serum);
 				player.containerMenu.broadcastChanges();

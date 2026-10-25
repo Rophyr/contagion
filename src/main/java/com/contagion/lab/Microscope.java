@@ -129,7 +129,7 @@ public final class Microscope {
 					PendingTest.ANALYSIS, sample, List.of(), false)));
 			forget(level, pos);
 			MicroscopeBlock.setStatus(level, pos, MicroscopeBlock.WORKING);
-			Chat.send(player, Msg.of("contagion.microscope.start_analysis", sample.source(), ContagionConfig.analysisTicks / 20), ChatFormatting.AQUA);
+			Chat.send(player, Msg.of("contagion.microscope.start_analysis", sample.source()), ChatFormatting.AQUA);
 			Vanilla.playSound(level, x, y, z, "block.glass.place", SoundSource.BLOCKS, 0.8F, 1.4F);
 			broadcast(level, pos);
 			return;
@@ -177,7 +177,7 @@ public final class Microscope {
 				PendingTest.CULTURE_TEST, donor, mix.reagents(), false)));
 		forget(level, pos);
 		MicroscopeBlock.setStatus(level, pos, MicroscopeBlock.WORKING);
-		Chat.send(player, Msg.of("contagion.microscope.start_culture", culture.source(), ContagionConfig.cultureTicks / 20), ChatFormatting.AQUA);
+		Chat.send(player, Msg.of("contagion.microscope.start_culture", culture.source()), ChatFormatting.AQUA);
 		Advancements.award(player, "petri");
 		Vanilla.playSound(level, x, y, z, "item.bottle.empty", SoundSource.BLOCKS, 0.8F, 1.2F);
 		broadcast(level, pos);
@@ -235,7 +235,7 @@ public final class Microscope {
 
 		if (isDegraded(server, sample)) {
 			report.flags |= MicroscopePayload.DEGRADED;
-			report.say(player, Msg.of("contagion.microscope.degraded", MAX_SAMPLE_AGE), ChatFormatting.GRAY);
+			report.say(player, Msg.of("contagion.microscope.degraded"), ChatFormatting.GRAY);
 			logResult = Msg.of("contagion.log.result.too_old");
 		} else if (!detected) {
 			if (sample.immune() && strain != null) {
@@ -247,7 +247,6 @@ public final class Microscope {
 				logResult = Msg.of("contagion.log.result.negative");
 			}
 
-			report.say(player, Msg.of("contagion.microscope.negative_note"), ChatFormatting.DARK_GRAY);
 		} else {
 			report.flags |= MicroscopePayload.POSITIVE;
 			report.load = sample.load();
@@ -257,7 +256,6 @@ public final class Microscope {
 			if (!research.knows("identified")) {
 				research = research.withFinding("identified");
 				report.say(player, Msg.of("contagion.microscope.identified", strain.nameMsg(), strain.profileMsg()), ChatFormatting.GOLD);
-				report.say(player, Msg.of("contagion.microscope.identified2"), ChatFormatting.GOLD);
 				Advancements.award(player, "identified");
 			}
 

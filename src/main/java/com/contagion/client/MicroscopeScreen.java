@@ -143,9 +143,9 @@ public final class MicroscopeScreen extends AbstractContainerScreen<MicroscopeMe
 			}
 
 			if (view.mode() != MicroscopePayload.RESULT) {
-				paragraphs.add(Msg.of("contagion.microscope.ui.hint_title").styled(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
-				paragraphs.add(Msg.of("contagion.microscope.ui.hint_blood").component());
-				paragraphs.add(Msg.of("contagion.microscope.ui.hint_culture").component());
+				if (this.menu.slide().isEmpty() && !view.has(MicroscopePayload.ERROR)) {
+					paragraphs.add(Msg.of("contagion.microscope.ui.hint").styled(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+				}
 			}
 		}
 

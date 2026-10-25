@@ -53,6 +53,16 @@ public final class Lab {
 		return Msg.of(key, args).styled(color);
 	}
 
+	/** Remembers that the players have worked with this substance (in this form), for the journal. */
+	public static void noteTried(MinecraftServer server, Ingredient ingredient) {
+		Research research = Strains.research(server);
+		Research updated = research.withFinding("tried:" + ingredient.reagent().name() + ":" + ingredient.form().name());
+
+		if (updated != research) {
+			Strains.setResearch(server, updated);
+		}
+	}
+
 	// ---- Blood samples ----------------------------------------------------------------------------------------
 
 	public static ItemStack bloodSample(MinecraftServer server, LivingEntity donor) {
@@ -68,10 +78,7 @@ public final class Lab {
 		stack.set(ModComponents.BLOOD_SAMPLE, data);
 		stack.set(DataComponents.LORE, new ItemLore(List.of(
 				lore("contagion.lore.sample.donor", ChatFormatting.GRAY, data.source()),
-				lore("contagion.lore.sample.day", ChatFormatting.GRAY, data.day(), Microscope.MAX_SAMPLE_AGE),
-				lore("contagion.lore.sample.use1", ChatFormatting.DARK_GRAY),
-				lore("contagion.lore.sample.use2", ChatFormatting.DARK_GRAY),
-				lore("contagion.lore.sample.use3", ChatFormatting.DARK_GRAY))));
+				lore("contagion.lore.sample.day", ChatFormatting.GRAY, data.day()))));
 		return stack;
 	}
 
@@ -109,10 +116,6 @@ public final class Lab {
 			default -> lore("contagion.lore.culture.dead", ChatFormatting.DARK_GRAY);
 		});
 
-		if (state == CultureData.COLONIZED) {
-			lines.add(lore("contagion.lore.culture.use", ChatFormatting.DARK_GRAY));
-		}
-
 		stack.set(DataComponents.LORE, new ItemLore(lines));
 	}
 
@@ -122,7 +125,6 @@ public final class Lab {
 		ItemStack stack = new ItemStack(ModItems.PREPARED_REAGENT);
 		stack.set(ModComponents.INGREDIENT, ingredient);
 		stack.set(DataComponents.ITEM_NAME, ingredient.msg().component());
-		stack.set(DataComponents.LORE, new ItemLore(List.of(lore("contagion.lore.prepared", ChatFormatting.DARK_GRAY))));
 		// Model: flag = extract (vial) vs. powder, colour = reagent colour.
 		stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(List.of(), List.of(ingredient.form() == Form.EXTRACT), List.of(),
 				List.of(0xFF000000 | ingredient.reagent().color())));
@@ -146,7 +148,6 @@ public final class Lab {
 
 		if (mix.sealed()) {
 			lines.add(lore("contagion.lore.serum.sealed_use1", ChatFormatting.DARK_GRAY));
-			lines.add(lore("contagion.lore.serum.sealed_use2", ChatFormatting.DARK_GRAY));
 		} else {
 			lines.add(lore("contagion.lore.serum.unsealed_use1", ChatFormatting.DARK_GRAY));
 			lines.add(lore("contagion.lore.serum.unsealed_use2", ChatFormatting.DARK_GRAY));

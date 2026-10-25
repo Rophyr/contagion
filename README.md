@@ -7,8 +7,9 @@
 2. Nobody starts infected, but the disease is **already out there in the world**. Be careful.
    Want it to start sooner? **`/virus outbreak`** secretly infects one random player (nobody is told who),
    or use `/virus infect <player>`.
-3. Craft a **Research Journal** (book + paper + coal/charcoal) and open it. It has a **lab manual**
-   and keeps track of everything you learn (tabs at the top, arrow keys or mouse wheel to turn pages). Recipes for the other tools show up in your recipe book.
+3. Craft a **Research Journal** (book + paper + coal/charcoal). It won't tell you what to do, but it notes
+   down your equipment, what you've tried and everything you observe (tabs at the top, arrow keys or mouse wheel
+   to turn pages). Recipes for the other tools show up in your recipe book.
 4. Survive.
 
 Languages: **English** and **French** (Français). Each player sees the mod in their own game language,

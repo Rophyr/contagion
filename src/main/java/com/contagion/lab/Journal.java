@@ -18,21 +18,15 @@ import com.contagion.text.Chat;
 import com.contagion.text.Msg;
 
 /**
- * The research journal opens its own screen (overview, lab manual, reagent index, known facts and the lab
+ * The research journal opens its own screen (overview, equipment notes, tried substances, findings and the lab
  * notebook). Research is shared, so every journal shows the same notes. Sneak + use prints a short summary in chat.
  */
 public final class Journal {
-	/** Manual sections: title key, then paragraph keys (contagion.book.manual.*). */
-	public static final String[][] MANUAL = {
-			{"blood", "blood.1"},
-			{"tips", "tips.1", "tips.2"},
-			{"cultures", "cultures.1", "cultures.2"},
-			{"preparing", "preparing.1", "preparing.2"},
-			{"mixing", "mixing.1", "mixing.2"},
-			{"testing", "testing.1", "testing.2"},
-			{"treating", "treating.1", "treating.2"},
-			{"other", "other.1", "other.2", "other.3"},
-	};
+	/**
+	 * The equipment notes (contagion.book.gear.*): what each tool is and how it is held, nothing about how to
+	 * research. Working out what to do with them is the game.
+	 */
+	public static final String[] EQUIPMENT = {"syringe", "other_hand", "beaker", "microscope", "vial", "thermometer", "mask", "blood"};
 
 	private Journal() {
 	}
@@ -45,7 +39,7 @@ public final class Journal {
 		List<String> findings = new ArrayList<>();
 
 		for (String finding : research.findings()) {
-			if (Lab.describeFinding(finding) != null) {
+			if (Lab.describeFinding(finding) != null || finding.startsWith("tried:")) {
 				findings.add(finding);
 			}
 		}

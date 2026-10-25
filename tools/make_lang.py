@@ -38,35 +38,29 @@ t("death.attack.contagion.infection.player", "%1$s succumbed to the infection wh
 # ---------------------------------------------------------------- static item tooltips
 for name, l1, l2 in [
     ("syringe", ("Use on someone to draw blood", "Utiliser sur quelqu'un : prise de sang"), ("Sneak + use: draw your own", "Accroupi + utiliser : votre propre sang")),
-    ("petri_dish", ("Blood sample in off-hand + use", "Échantillon en main secondaire + utiliser"), ("to start a culture", "pour lancer une culture")),
-    ("mortar", ("Reagent in off-hand + use", "Réactif en main secondaire + utiliser"), ("to grind it", "pour le broyer")),
-    ("empty_vial", ("Reagent in off-hand + use", "Réactif en main secondaire + utiliser"), ("to start a mixture", "pour commencer un mélange")),
+    ("petri_dish", ("A shallow glass dish with a lid", "Une boîte en verre peu profonde"), ("Use with something in your other hand", "S'utilise avec quelque chose dans l'autre main")),
+    ("mortar", ("For crushing things", "Pour écraser des choses"), ("Use with something in your other hand", "S'utilise avec quelque chose dans l'autre main")),
+    ("empty_vial", ("A small corked vial", "Une petite fiole bouchée"), ("Use with something in your other hand", "S'utilise avec quelque chose dans l'autre main")),
     ("thermometer", ("Hold use to take your temperature", "Maintenir utiliser pour prendre votre température"), ("Hold use on someone to take theirs", "Maintenir sur quelqu'un pour la sienne")),
-    ("research_journal", ("Everyone's shared research notes", "Les notes de recherche de tous"), ("Use to read", "Utiliser pour lire")),
-    ("face_mask", ("Wear on your head", "Se porte sur la tête"), ("Greatly reduces airborne spread", "Réduit fortement la transmission par l'air")),
-    ("microscope", ("Analyzes blood samples", "Analyse les échantillons de sang"), ("and tests serums on cultures", "et teste les sérums sur des cultures")),
-    ("beaker", ("Boils reagents into extracts", "Fait bouillir les réactifs en extraits"), ("Needs water and heat below", "Nécessite de l'eau et une source de chaleur dessous")),
+    ("research_journal", ("Everyone's shared notes", "Les notes communes"), ("Use to read", "Utiliser pour lire")),
+    ("face_mask", ("Wear on your head", "Se porte sur la tête"), ("Keeps your breath to yourself", "Garde votre souffle pour vous")),
+    ("microscope", ("For a closer look", "Pour y regarder de plus près"), ("Takes its time", "Prend son temps")),
+    ("beaker", ("Heat-proof glassware", "Verrerie résistante à la chaleur"), ("Needs water, and heat below", "Il lui faut de l'eau, et du feu dessous")),
 ]:
     t(f"contagion.lore.{name}.1", *l1)
     t(f"contagion.lore.{name}.2", *l2)
 
 t("contagion.lore.sample.donor", "Donor: %s", "Donneur : %s")
-t("contagion.lore.sample.day", "Drawn on day %s (keeps %s days)", "Prélevé le jour %s (se conserve %s jours)")
-t("contagion.lore.sample.use1", "Place it in a Microscope to analyze", "À placer dans un Microscope pour l'analyser")
-t("contagion.lore.sample.use2", "Use with a Petri Dish to grow a culture", "S'utilise avec une Boîte de Petri pour une culture")
-t("contagion.lore.sample.use3", "Sneak + use on someone to transfuse", "Accroupi + utiliser sur quelqu'un : transfusion")
+t("contagion.lore.sample.day", "Drawn on day %s", "Prélevé le jour %s")
 t("contagion.lore.culture.donor", "Blood of %s (day %s)", "Sang de %s (jour %s)")
 t("contagion.lore.culture.growing", "Growing...", "En croissance...")
 t("contagion.lore.culture.colonized", "Colonies have grown", "Des colonies se sont développées")
 t("contagion.lore.culture.sterile", "Nothing grew", "Rien n'a poussé")
 t("contagion.lore.culture.dead", "The culture has died", "La culture est morte")
-t("contagion.lore.culture.use", "Place it in a Microscope with a serum to test it", "À placer dans un Microscope avec un sérum pour le tester")
-t("contagion.lore.prepared", "Can be mixed into a serum", "Peut être ajouté à un sérum")
 t("contagion.lore.serum.sealed", "Sealed experimental serum", "Sérum expérimental scellé")
 t("contagion.lore.serum.unsealed", "Unsealed mixture (%s/%s)", "Mélange non scellé (%s/%s)")
 t("contagion.lore.serum.sealed_use1", "Use twice to inject yourself, or use on someone", "Utiliser deux fois pour vous l'injecter, ou sur quelqu'un")
-t("contagion.lore.serum.sealed_use2", "Or test it on a culture with a Microscope", "Ou testez-le sur une culture au Microscope")
-t("contagion.lore.serum.unsealed_use1", "Reagent in off-hand + use to add it", "Réactif en main secondaire + utiliser pour l'ajouter")
+t("contagion.lore.serum.unsealed_use1", "Use with something in your other hand to add it", "Utiliser avec quelque chose dans l'autre main pour l'ajouter")
 t("contagion.lore.serum.unsealed_use2", "Sneak + use to seal", "Accroupi + utiliser pour sceller")
 
 # ---------------------------------------------------------------- reagents, categories, forms
@@ -169,48 +163,44 @@ for key, en, fr in [
     ("too_weak", "You're too weak to draw blood safely.", "Vous êtes trop faible pour faire une prise de sang."),
     ("confirm_inject", "Inject yourself with this serum? Use again to confirm.", "Vous injecter ce sérum ? Utilisez à nouveau pour confirmer."),
     ("sealed_serum", "Sealed serum: %s. Use twice to inject yourself.", "Sérum scellé : %s. Utilisez deux fois pour vous l'injecter."),
-    ("dish_need_sample", "Hold a blood sample in your off-hand to start a culture.", "Tenez un échantillon de sang en main secondaire pour lancer une culture."),
-    ("inoculated", "You smear %s's blood on the dish. It needs about %s minutes to grow.", "Vous étalez le sang de %s dans la boîte. Il faut environ %s minutes de croissance."),
-    ("culture_ready", "Colonies have grown. Test a serum on it with a Microscope.", "Des colonies ont poussé. Testez un sérum dessus avec un Microscope."),
-    ("culture_sterile", "Nothing grew in this dish.", "Rien n'a poussé dans cette boîte."),
+    ("dish_need_sample", "You need something in your other hand to put in the dish.", "Il vous faut quelque chose dans l'autre main à mettre dans la boîte."),
+    ("inoculated", "You smear %s's blood on the dish and close the lid.", "Vous étalez le sang de %s dans la boîte et refermez le couvercle."),
+    ("culture_ready", "Something has grown in the dish.", "Quelque chose a poussé dans la boîte."),
+    ("culture_sterile", "Nothing grew in that dish.", "Rien n'a poussé dans cette boîte."),
     ("culture_dead", "This culture has died.", "Cette culture est morte."),
-    ("mortar_need_reagent", "Hold a reagent in your off-hand to grind it.", "Tenez un réactif en main secondaire pour le broyer."),
-    ("mortar_only_raw", "Only raw reagents can be ground.", "Seuls les réactifs bruts peuvent être broyés."),
+    ("mortar_need_reagent", "Nothing worth grinding in your other hand.", "Rien qui vaille la peine d'être broyé dans votre autre main."),
+    ("mortar_only_raw", "That has already been prepared.", "C'est déjà préparé."),
     ("ground", "You grind it into %s.", "Vous le broyez : %s."),
-    ("vial_need_reagent", "Hold a reagent in your off-hand to add it to the vial.", "Tenez un réactif en main secondaire pour l'ajouter à la fiole."),
+    ("vial_need_reagent", "Nothing worth putting in the vial in your other hand.", "Rien qui vaille la peine d'aller dans la fiole dans votre autre main."),
     ("mixture_started", "Added %s to a new mixture.", "%s ajouté à un nouveau mélange."),
-    ("mixture_need_reagent", "Hold a reagent in your off-hand to add it, or sneak + use to seal the mixture.", "Tenez un réactif en main secondaire pour l'ajouter, ou accroupi + utiliser pour sceller."),
+    ("mixture_need_reagent", "Nothing worth adding in your other hand. Sneak + use to seal the vial.", "Rien qui vaille la peine d'être ajouté dans votre autre main. Accroupi + utiliser pour sceller la fiole."),
     ("mixture_full", "The vial is full. Sneak + use to seal it.", "La fiole est pleine. Accroupi + utiliser pour la sceller."),
     ("mixture_duplicate", "This mixture already contains %s.", "Ce mélange contient déjà %s."),
     ("mixture_added", "Added %s (%s/%s).", "%s ajouté (%s/%s)."),
-    ("sealed", "Serum sealed. Test it on a culture, or inject it... at your own risk.", "Sérum scellé. Testez-le sur une culture, ou injectez-le... à vos risques."),
+    ("sealed", "Serum sealed.", "Sérum scellé."),
 ]:
     t("contagion.hint." + key, en, fr)
 
 # ---------------------------------------------------------------- microscope & culture tests
 for key, en, fr in [
-    ("start_analysis", "You prepare a slide of %s's blood. Analysis will take about %s seconds.", "Vous préparez une lame du sang de %s. L'analyse prendra environ %s secondes."),
-    ("start_culture", "You expose %s's culture to the serum. Check back in about %s seconds.", "Vous exposez la culture de %s au sérum. Revenez dans environ %s secondes."),
-    ("seal_first", "Seal the serum first (sneak + use) before testing it.", "Scellez d'abord le sérum (accroupi + utiliser) avant de le tester."),
-    ("need_culture", "To test this serum, hold a grown culture (Petri Dish) in your off-hand.", "Pour tester ce sérum, tenez une culture développée (Boîte de Petri) en main secondaire."),
-    ("culture_growing", "That culture hasn't finished growing yet.", "Cette culture n'a pas fini de pousser."),
+    ("start_analysis", "You prepare a slide of %s's blood.", "Vous préparez une lame du sang de %s."),
+    ("start_culture", "You expose %s's culture to the serum.", "Vous exposez la culture de %s au sérum."),
+    ("seal_first", "The serum isn't sealed.", "Le sérum n'est pas scellé."),
+    ("culture_growing", "Nothing to see yet in that dish.", "Rien à voir dans cette boîte pour l'instant."),
     ("culture_sterile", "Nothing grew in that dish. There's nothing to test on.", "Rien n'a poussé dans cette boîte. Rien à tester."),
     ("culture_dead", "That culture is dead.", "Cette culture est morte."),
-    ("help", "Microscope: use with a blood sample to analyze it, or with a sealed serum (grown culture in off-hand) to test the serum.", "Microscope : utilisez-le avec un échantillon de sang pour l'analyser, ou avec un sérum scellé (culture en main secondaire) pour le tester."),
-    ("done_notify", "The microscope has finished. Look through it to read the result.", "Le microscope a terminé. Regardez dedans pour lire le résultat."),
+    ("done_notify", "The microscope has finished.", "Le microscope a terminé."),
     ("analysis_header", "Blood analysis: %s (drawn day %s)", "Analyse de sang : %s (prélevé le jour %s)"),
     ("culture_header", "Culture test: %s", "Test sur culture : %s"),
-    ("degraded", "The sample has degraded too much to read. Blood keeps about %s days.", "L'échantillon est trop dégradé pour être lu. Le sang se conserve environ %s jours."),
-    ("antibodies", "Antibodies against the pathogen found. The donor is immune.", "Anticorps contre le pathogène détectés. Le donneur est immunisé."),
+    ("degraded", "The sample has degraded too much to read.", "L'échantillon est trop dégradé pour être lu."),
+    ("antibodies", "There's something in this blood that attacks the pathogen.", "Il y a dans ce sang quelque chose qui attaque le pathogène."),
     ("negative", "No pathogen detected.", "Aucun pathogène détecté."),
-    ("negative_note", "(Very early infections can be missed. If in doubt, test again later.)", "(Une infection très récente peut passer inaperçue. Dans le doute, refaites un test plus tard.)"),
-    ("positive", "PATHOGEN DETECTED. Viral load: %s.", "PATHOGÈNE DÉTECTÉ. Charge virale : %s."),
+    ("positive", "Pathogen present. Viral load: %s.", "Pathogène présent. Charge virale : %s."),
     ("identified", "Identified as %s, a %s pathogen.", "Identifié : %s, un pathogène %s."),
-    ("identified2", "It looks like it takes a combination of three active compounds to neutralize it.", "Il semble qu'il faille une combinaison de trois composés actifs pour le neutraliser."),
-    ("nothing_new_donor", "Nothing new compared to the last slide of %s's blood from that day. Try a fresh sample tomorrow, or another donor.", "Rien de nouveau par rapport à la dernière lame du sang de %s de ce jour. Réessayez demain, ou avec un autre donneur."),
-    ("insight", "New insight: %s", "Nouvelle découverte : %s"),
-    ("no_insight", "No new insights from this slide. A sicker donor gives clearer results.", "Rien de nouveau sur cette lame. Un donneur plus malade donne des résultats plus nets."),
-    ("recorded", "(Recorded in the Research Journal.)", "(Consigné dans le Journal de recherche.)"),
+    ("nothing_new_donor", "It looks just like the last slide of %s's blood.", "Ça ressemble exactement à la dernière lame du sang de %s."),
+    ("insight", "You notice something: %s", "Vous remarquez quelque chose : %s"),
+    ("no_insight", "Nothing new on this slide.", "Rien de nouveau sur cette lame."),
+    ("recorded", "(Noted in the Research Journal.)", "(Noté dans le Journal de recherche.)"),
     ("culture_failed", "The test failed.", "Le test a échoué."),
 ]:
     t("contagion.microscope." + key, en, fr)
@@ -228,11 +218,11 @@ for i, (en, fr) in enumerate([("Healthy tissue sample: unharmed.", "Tissu sain t
     t(f"contagion.culture.tissue.{i}", en, fr)
 
 # ---------------------------------------------------------------- facts
-t("contagion.fact.category", "The pathogen's membrane breaks down when exposed to %s compounds. One active agent is probably of that kind.",
-  "La membrane du pathogène se dégrade au contact de composés de type %s. L'un des agents actifs en fait probablement partie.")
-t("contagion.fact.form", "The %s active agent only works when %s.", "L'agent actif de type %s ne fonctionne que %s.")
-t("contagion.fact.toxic", "%s destroyed healthy cells in the sample. It is probably toxic to patients.", "%s a détruit des cellules saines de l'échantillon. Probablement toxique pour les patients.")
-t("contagion.fact.inert", "%s showed no interaction with the pathogen at all.", "%s n'a montré aucune interaction avec le pathogène.")
+t("contagion.fact.category", "The pathogen's membrane seemed to weaken around traces of %s matter.",
+  "La membrane du pathogène a semblé s'affaiblir au contact de traces de matière de type %s.")
+t("contagion.fact.form", "Whatever it is in the %s matter, it reacted more when %s.", "Ce qu'il y a dans la matière de type %s réagissait davantage une fois %s.")
+t("contagion.fact.toxic", "%s destroyed healthy cells in the sample.", "%s a détruit des cellules saines de l'échantillon.")
+t("contagion.fact.inert", "%s did nothing at all to the pathogen.", "%s n'a eu absolument aucun effet sur le pathogène.")
 
 # ---------------------------------------------------------------- lab notebook entries
 t("contagion.log.analysis", "Day %1$s - Analysis of %2$s's blood: %3$s", "Jour %1$s - Analyse du sang de %2$s : %3$s")
@@ -283,12 +273,12 @@ t("contagion.transfuse.antibodies", "You feel a little stronger. Something in th
 
 # ---------------------------------------------------------------- beaker
 for key, en, fr in [
-    ("need_water", "Fill the beaker with water first (water bottle or bucket).", "Remplissez d'abord le bécher d'eau (fiole d'eau ou seau)."),
-    ("need_reagent", "Use a reagent on the beaker to boil it.", "Utilisez un réactif sur le bécher pour le faire bouillir."),
+    ("need_water", "It's empty.", "Il est vide."),
+    ("need_reagent", "Nothing worth boiling in your hand.", "Rien qui vaille la peine d'être bouilli dans votre main."),
     ("already_extract", "That's already an extract.", "C'est déjà un extrait."),
-    ("need_heat", "The water needs heat below the beaker: campfire, fire, lava or a magma block.", "L'eau doit être chauffée sous le bécher : feu de camp, feu, lave ou bloc de magma."),
-    ("started", "%s starts to simmer. About %s seconds.", "%s commence à frémir. Environ %s secondes."),
-    ("need_vial", "Use an Empty Vial to collect the extract.", "Utilisez une Fiole vide pour récupérer l'extrait."),
+    ("need_heat", "The water stays cold.", "L'eau reste froide."),
+    ("started", "%s starts to simmer.", "%s commence à frémir."),
+    ("need_vial", "You'll need something to pour it into.", "Il vous faut quelque chose pour le verser."),
     ("collected", "You collect: %s.", "Vous récupérez : %s."),
     ("done_notify", "A beaker has finished boiling.", "Un bécher a fini de bouillir."),
 ]:
@@ -301,55 +291,27 @@ for key, en, fr in [
     ("day", "Day %s", "Jour %s"),
     ("pathogen", "Pathogen", "Pathogène"),
     ("type", "Type: %s", "Type : %s"),
-    ("needs3", "Needs 3 compounds.", "3 composés requis."),
-    ("unidentified", "Unidentified", "Non identifié"),
-    ("unidentified_hint", "Analyze infected blood.", "Analysez du sang infecté."),
+    ("unidentified", "Unknown", "Inconnu"),
     ("counts", "Facts: %s | Notes: %s", "Faits : %s | Notes : %s"),
-    ("index", "Reagent Index", "Index des réactifs"),
-    ("legend.unknown", "unknown", "inconnu"),
-    ("legend.inert", "inert (useless)", "inerte (inutile)"),
-    ("legend.toxic", "toxic", "toxique"),
-    ("legend.active", "holds an active agent", "contient un agent actif"),
-    ("category_form", "%s (%s)", "%s (%s)"),
-    ("known_facts", "Known Facts", "Faits connus"),
+    ("index", "Tried substances", "Substances essayées"),
+    ("legend.inert", "did nothing", "sans effet"),
+    ("legend.toxic", "damaged healthy cells", "a abîmé des cellules saines"),
+    ("known_facts", "Observations", "Observations"),
     ("nothing_yet", "Nothing yet.", "Rien pour l'instant."),
     ("notebook", "Lab Notebook", "Carnet de labo"),
+    ("nothing_tried", "Nothing yet.", "Rien pour l'instant."),
+    ("tried", "Tried: %s", "Essayé : %s"),
+    ("gear", "Equipment", "Matériel"),
+    ("gear.syringe", "Syringe: draws blood. Crouch to use it on yourself.", "Seringue : prélève du sang. Accroupissez-vous pour l'utiliser sur vous."),
+    ("gear.other_hand", "Dish, mortar and vials: they work on whatever is in your other hand.", "Boîte, mortier et fioles : ils agissent sur ce que vous tenez dans l'autre main."),
+    ("gear.beaker", "Beaker: water inside, fire beneath, and patience.", "Bécher : de l'eau dedans, du feu dessous, et de la patience."),
+    ("gear.microscope", "Microscope: look through it. It is slow.", "Microscope : regardez dedans. Il est lent."),
+    ("gear.vial", "A vial can be sealed (crouch + use). What's sealed can be injected.", "Une fiole se scelle (accroupi + utiliser). Ce qui est scellé peut s'injecter."),
+    ("gear.thermometer", "Thermometer: hold it a while.", "Thermomètre : tenez-le un moment."),
+    ("gear.mask", "Mask: worn on the face.", "Masque : se porte sur le visage."),
+    ("gear.blood", "Blood can go back into a vein, too (crouch).", "Le sang peut aussi retourner dans une veine (accroupi)."),
     ("newest_first", "newest first", "récents d'abord"),
-    ("empty", "Empty.", "Vide."),
-    ("manual.tips", "Research tips", "Conseils"),
-    ("manual.blood", "Blood tests", "Prises de sang"),
-    ("manual.blood.1", "Use a Syringe on someone (sneak + use: yourself), then put the sample on the slide of a Microscope.",
-     "Seringue sur quelqu'un (accroupi : sur vous), puis l'échantillon sur la lame d'un Microscope."),
-    ("manual.tips.1", "Early infections can test negative. Sicker donors give clearer results.",
-     "Une infection récente peut sortir négative. Un donneur plus malade est plus parlant."),
-    ("manual.tips.2", "One new fact per donor per day. Veins need hours to recover between draws.",
-     "Un fait nouveau par donneur et par jour. Les veines mettent des heures à récupérer."),
-    ("manual.cultures", "Cultures", "Cultures"),
-    ("manual.cultures.1", "Petri Dish in hand, blood in off-hand: use. It takes time to grow.",
-     "Boîte de Petri en main, sang en main secondaire : utiliser. Il faut du temps pour qu'elle pousse."),
-    ("manual.cultures.2", "Only blood with enough pathogen grows. Cultures die after a while.",
-     "Seul un sang assez chargé pousse. Les cultures finissent par mourir."),
-    ("manual.preparing", "Preparing", "Préparation"),
-    ("manual.preparing.1", "Mortar in hand, reagent in off-hand: grind it.", "Mortier en main, réactif en main secondaire : broyer."),
-    ("manual.preparing.2", "Beaker: water, heat below, then a reagent. Collect the extract with an Empty Vial.",
-     "Bécher : de l'eau, de la chaleur dessous, puis un réactif. Récupérez l'extrait avec une Fiole vide."),
-    ("manual.mixing", "Mixing serums", "Mélanger"),
-    ("manual.mixing.1", "Empty Vial in hand, reagent in off-hand: use. Up to 4. Raw, ground or extract.",
-     "Fiole vide en main, réactif en main secondaire : utiliser. Jusqu'à 4. Brut, broyé ou extrait."),
-    ("manual.mixing.2", "Sneak + use to seal it.", "Accroupi + utiliser pour sceller."),
-    ("manual.testing", "Testing serums", "Tester"),
-    ("manual.testing.1", "Microscope: a grown culture on the slide, a sealed serum next to it, then Start.",
-     "Microscope : une culture développée sur la lame, un sérum scellé à côté, puis Lancer."),
-    ("manual.testing.2", "Safe but slow. Watch for odd reactions: preparation matters.",
-     "Sans risque mais lent. Guettez les réactions étranges : la préparation compte."),
-    ("manual.treating", "Treating", "Soigner"),
-    ("manual.treating.1", "Use a sealed serum twice to inject yourself, or use it on someone.",
-     "Utilisez un sérum scellé deux fois pour vous l'injecter, ou sur quelqu'un."),
-    ("manual.treating.2", "Risky! Some reagents are toxic.", "Risqué ! Certains réactifs sont toxiques."),
-    ("manual.other", "Other tools", "Autres outils"),
-    ("manual.other.1", "Thermometer: hold use (on yourself or someone) to check for fever.", "Thermomètre : maintenez utiliser (sur vous ou quelqu'un) pour vérifier la fièvre."),
-    ("manual.other.2", "Face Mask: wear it to slow the spread.", "Masque : portez-le pour freiner la contagion."),
-    ("manual.other.3", "Sneak + use a Blood Sample on someone to transfuse it.", "Accroupi + échantillon de sang sur quelqu'un : transfusion."),
+    ("empty", "There's nothing on the slide.", "Il n'y a rien sur la lame."),
 ]:
     t("contagion.book." + key, en, fr)
 for key, en, fr in [
@@ -366,8 +328,7 @@ for key, en, fr in [
     ("released", "The pathogen has been released (%s new host(s)).", "Le pathogène a été libéré (%s nouvel(s) hôte(s))."),
     ("nobody", "There is nobody left to infect.", "Il n'y a plus personne à infecter."),
     ("outbreak", "Somewhere among you, patient zero has been infected. Nobody knows who.", "Quelque part parmi vous, le patient zéro a été infecté. Personne ne sait qui."),
-    ("tip", "Tip: craft a Research Journal (book + paper + coal). It has a lab manual and tracks your research.",
-     "Astuce : fabriquez un Journal de recherche (livre + papier + charbon). Il contient un manuel et suit vos recherches."),
+    ("tip", "Someone should keep notes. (Research Journal: book + paper + coal.)", "Quelqu'un devrait prendre des notes. (Journal de recherche : livre + papier + charbon.)"),
     ("cured", "Cured %s entities.", "%s entités guéries."),
     ("immunized", "Immunized %s entities.", "%s entités immunisées."),
     ("setday", "Set %s entities to disease day %s.", "%s entités placées au jour %s de la maladie."),
@@ -386,12 +347,10 @@ for key, en, fr in [
     ("serum", "Serum", "Sérum"),
     ("start", "Start", "Lancer"),
     ("examine", "Examine", "Examiner"),
-    ("ready", "The results are ready. Press Examine.", "Les résultats sont prêts. Appuyez sur Examiner."),
-    ("hint_title", "How to use", "Mode d'emploi"),
-    ("hint_blood", "Blood sample on the slide, then Start: analyzes it.", "Échantillon de sang sur la lame, puis Démarrer : l'analyse."),
-    ("hint_culture", "A grown culture on the slide plus a sealed serum: tests the serum on it.", "Une culture développée sur la lame et un sérum scellé : teste le sérum dessus."),
+    ("ready", "Done.", "Terminé."),
+    ("hint", "Nothing on the slide.", "Rien sur la lame."),
     ("empty", "Put a blood sample or a culture on the slide first.", "Placez d'abord un échantillon de sang ou une culture sur la lame."),
-    ("need_serum", "To test a culture, put a sealed serum in the serum slot.", "Pour tester une culture, placez un sérum scellé dans l'emplacement du sérum."),
+    ("need_serum", "Just a culture. Nothing new to see.", "Juste une culture. Rien de nouveau à voir."),
     ("running_analysis", "Analyzing %s's blood...", "Analyse du sang de %s..."),
     ("running_culture", "Testing %s on %s's culture...", "Test de %s sur la culture de %s..."),
 ]:
@@ -399,16 +358,12 @@ for key, en, fr in [
 
 for key, en, fr in [
     ("overview", "Overview", "Résumé"),
-    ("manual", "Lab manual", "Manuel de labo"),
-    ("reagents", "Reagents", "Réactifs"),
-    ("findings", "Findings", "Découvertes"),
+    ("equipment", "Equipment", "Matériel"),
+    ("substances", "Substances", "Substances"),
+    ("findings", "Observations", "Observations"),
     ("notebook", "Lab notebook", "Carnet de labo"),
 ]:
     t("contagion.journal.tab." + key, en, fr)
-t("contagion.journal.tabs_hint", "Use the bookmarks at the top. Arrow keys or the mouse wheel turn the pages.",
-  "Utilisez les marque-pages en haut. Les flèches ou la molette tournent les pages.")
-t("contagion.journal.reagents_hint", "Hover over a reagent to see what is known about it.", "Survolez un réactif pour voir ce qu'on en sait.")
-t("contagion.journal.prepared_as", "must be: %s", "doit être : %s")
 t("contagion.thermometer.hud.measuring", "Measuring...", "Mesure...")
 
 # ---------------------------------------------------------------- advancements
@@ -416,11 +371,11 @@ for key, en_title, en_desc, fr_title, fr_desc in [
     ("root", "Contagion", "Something is going around. Stay healthy.", "Contagion", "Quelque chose circule. Restez en bonne santé."),
     ("ounce_of_prevention", "Ounce of Prevention", "Make a Face Mask", "Mieux vaut prévenir", "Fabriquer un Masque"),
     ("under_the_lens", "Under the Lens", "Build a Microscope", "Sous la lentille", "Construire un Microscope"),
-    ("first_analysis", "Blood Work", "Analyze a blood sample", "Prise de sang", "Analyser un échantillon de sang"),
-    ("identified", "Know Your Enemy", "Identify the pathogen", "Connais ton ennemi", "Identifier le pathogène"),
-    ("petri", "Something Is Growing", "Grow a culture in a Petri Dish", "Ça pousse", "Faire pousser une culture dans une Boîte de Petri"),
-    ("alchemist", "Kitchen Chemistry", "Boil a reagent into an extract", "Chimie de cuisine", "Faire bouillir un réactif en extrait"),
-    ("mad_scientist", "Mad Scientist", "Inject an experimental serum", "Savant fou", "Injecter un sérum expérimental"),
+    ("first_analysis", "Blood Work", "Take a closer look at someone's blood", "Prise de sang", "Regarder de plus près le sang de quelqu'un"),
+    ("identified", "Know Your Enemy", "Put a name on it", "Connais ton ennemi", "Mettre un nom dessus"),
+    ("petri", "Something Is Growing", "Try something on what you grew", "Ça pousse", "Essayer quelque chose sur ce que vous avez fait pousser"),
+    ("alchemist", "Kitchen Chemistry", "Cook something that isn't food", "Chimie de cuisine", "Cuisiner quelque chose qui ne se mange pas"),
+    ("mad_scientist", "Mad Scientist", "Try it on a human", "Savant fou", "Essayer sur un humain"),
     ("cured", "Survivor", "Be cured of the disease", "Survivant", "Être guéri de la maladie"),
     ("doctor", "Doctor", "Cure someone else", "Docteur", "Guérir quelqu'un d'autre"),
 ]:

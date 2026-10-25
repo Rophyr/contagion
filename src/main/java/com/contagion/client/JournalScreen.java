@@ -32,7 +32,7 @@ import com.contagion.registry.ModItems;
 import com.contagion.text.Msg;
 
 /**
- * The research journal: an open book with bookmark tabs (overview, lab manual, reagents, findings, notebook).
+ * The research journal: an open book with bookmark tabs (overview, equipment, tried substances, findings, notebook).
  * Everything is shared research, sent by the server when the journal is opened.
  */
 public final class JournalScreen extends Screen {
@@ -47,7 +47,7 @@ public final class JournalScreen extends Screen {
 	private static final int TAB_W = 28;
 	private static final int ARROW_Y = 172;
 	private static final int INK = 0xFF2A2622;
-	private static final String[] TABS = {"overview", "manual", "reagents", "findings", "notebook"};
+	private static final String[] TABS = {"overview", "equipment", "substances", "findings", "notebook"};
 
 	private static int lastTab;
 
@@ -69,8 +69,8 @@ public final class JournalScreen extends Screen {
 		this.bookY = Math.max(22, (this.height - BOOK_H) / 2 + 8);
 		this.pages.clear();
 		this.pages.add(paginate(overview()));
-		this.pages.add(paginate(manual()));
-		this.pages.add(paginate(reagents()));
+		this.pages.add(paginate(equipment()));
+		this.pages.add(paginate(substances()));
 		this.pages.add(paginate(findings()));
 		this.pages.add(paginate(notebook()));
 	}
@@ -166,10 +166,15 @@ public final class JournalScreen extends Screen {
 				}
 
 				if (mouseX >= ix - 2 && mouseX < ix + 18 && mouseY >= iy - 2 && mouseY < iy + 18) {
-					MutableComponent name = reagent.msg().component();
-					Component status = Msg.of(toxic ? "contagion.book.legend.toxic" : inert ? "contagion.book.legend.inert" : "contagion.book.legend.unknown")
-							.styled(toxic ? ChatFormatting.RED : ChatFormatting.GRAY);
-					graphics.setTooltipForNextFrame(JournalScreen.this.font, List.of(name, status), Optional.empty(), mouseX, mouseY);
+					List<Component> tooltip = new ArrayList<>();
+					tooltip.add(reagent.msg().component());
+					tooltip.add(Component.translatable("contagion.book.tried", triedForms(reagent)).withStyle(ChatFormatting.GRAY));
+
+					if (toxic || inert) {
+						tooltip.add(Msg.of(toxic ? "contagion.book.legend.toxic" : "contagion.book.legend.inert").styled(toxic ? ChatFormatting.RED : ChatFormatting.DARK_GRAY));
+					}
+
+					graphics.setTooltipForNextFrame(JournalScreen.this.font, tooltip, Optional.empty(), mouseX, mouseY);
 				}
 			}
 		}
@@ -229,18 +234,12 @@ public final class JournalScreen extends Screen {
 		if (this.data.identified()) {
 			blocks.add(paragraph(this.data.name().copy().withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), 4));
 			blocks.add(paragraph(Component.translatable("contagion.book.type", this.data.profile()).withStyle(ChatFormatting.DARK_GRAY), 4));
-			blocks.add(single(new Space(4)));
-			blocks.add(paragraph(styled("contagion.book.needs3", ChatFormatting.DARK_GRAY), 4));
 		} else {
 			blocks.add(paragraph(styled("contagion.book.unidentified", ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC), 4));
-			blocks.add(single(new Space(4)));
-			blocks.add(paragraph(styled("contagion.book.unidentified_hint", ChatFormatting.DARK_GRAY), 4));
 		}
 
 		blocks.add(single(new Space(14)));
 		blocks.add(paragraph(Msg.of("contagion.book.counts", factCount(), this.data.log().size()).styled(ChatFormatting.DARK_GREEN), 0));
-		blocks.add(single(new Space(10)));
-		blocks.add(paragraph(styled("contagion.journal.tabs_hint", ChatFormatting.GRAY, ChatFormatting.ITALIC), 0));
 		return blocks;
 	}
 
@@ -256,78 +255,65 @@ public final class JournalScreen extends Screen {
 		return count;
 	}
 
-	private List<Block> manual() {
+	/** A few terse notes on the equipment: what it is and how it's held, never what to do with it. */
+	private List<Block> equipment() {
 		List<Block> blocks = new ArrayList<>();
+		blocks.add(paragraph(styled("contagion.book.gear", ChatFormatting.DARK_AQUA, ChatFormatting.BOLD), 0));
+		blocks.add(single(new Space(6)));
 
-		for (String[] section : Journal.MANUAL) {
-			List<Element> head = new ArrayList<>(paragraph(styled("contagion.book.manual." + section[0], ChatFormatting.DARK_AQUA, ChatFormatting.BOLD), 0).elements());
-			head.add(new Space(3));
-			Block first = paragraph(styled("contagion.book.manual." + section[1]), 0);
-			// Keep the heading with the start of its first paragraph.
-			head.addAll(first.elements().subList(0, Math.min(3, first.elements().size())));
-			blocks.add(new Block(head));
-
-			for (Element rest : first.elements().subList(Math.min(3, first.elements().size()), first.elements().size())) {
-				blocks.add(single(rest));
-			}
-
-			for (int i = 2; i < section.length; i++) {
-				blocks.add(single(new Space(5)));
-				boolean note = i == section.length - 1 && section.length > 2;
-				for (Element line : paragraph(note ? styled("contagion.book.manual." + section[i], ChatFormatting.DARK_GRAY)
-						: styled("contagion.book.manual." + section[i]), 0).elements()) {
-					blocks.add(single(line));
-				}
-			}
-
-			blocks.add(single(new Space(12)));
+		for (String key : Journal.EQUIPMENT) {
+			blocks.add(paragraph(Component.literal("\u2022 ").append(styled("contagion.book.gear." + key)), 0));
+			blocks.add(single(new Space(5)));
 		}
 
 		return blocks;
 	}
 
-	private List<Block> reagents() {
+	/** Every substance the players have worked with so far, with whatever was concluded about it. */
+	private List<Block> substances() {
 		List<Block> blocks = new ArrayList<>();
 		blocks.add(paragraph(styled("contagion.book.index", ChatFormatting.DARK_AQUA, ChatFormatting.BOLD), 0));
-		blocks.add(single(new Space(3)));
-		blocks.add(paragraph(styled("contagion.journal.reagents_hint", ChatFormatting.DARK_GRAY), 0));
-		blocks.add(paragraph(Component.literal("☠ ").append(styled("contagion.book.legend.toxic")).withStyle(ChatFormatting.DARK_RED), 0));
-		blocks.add(paragraph(Component.literal("✗ ").append(styled("contagion.book.legend.inert")).withStyle(ChatFormatting.DARK_GRAY), 0));
-		blocks.add(paragraph(Component.literal("★ ").append(styled("contagion.book.legend.active")).withColor(Microscope.DARK_GOLD), 0));
-		blocks.add(single(new Space(8)));
+		blocks.add(single(new Space(6)));
+		List<Reagent> tried = new ArrayList<>();
 
-		for (Reagent.Category category : Reagent.Category.values()) {
-			boolean active = knows("cat:" + category.name());
-			MutableComponent header = Component.empty();
-
-			if (active) {
-				header.append(Component.literal("★ ").withColor(Microscope.DARK_GOLD));
+		for (Reagent reagent : Reagent.values()) {
+			if (triedForms(reagent).length() > 0) {
+				tried.add(reagent);
 			}
+		}
 
-			header.append(active ? category.msg().styled(ChatFormatting.BOLD).withColor(Microscope.DARK_GOLD)
-					: category.msg().styled(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
-			List<Element> group = new ArrayList<>(paragraph(header, 0).elements());
+		if (tried.isEmpty()) {
+			blocks.add(paragraph(styled("contagion.book.nothing_tried", ChatFormatting.GRAY, ChatFormatting.ITALIC), 0));
+			return blocks;
+		}
 
-			for (Form form : Form.values()) {
-				if (knows("form:" + category.name() + ":" + form.name())) {
-					group.addAll(paragraph(Msg.of("contagion.journal.prepared_as", form.msg()).styled(ChatFormatting.DARK_PURPLE), 4).elements());
-				}
-			}
+		// Alphabetical, so the order gives nothing away.
+		tried.sort((a, b) -> a.msg().component().getString().compareToIgnoreCase(b.msg().component().getString()));
 
-			List<Reagent> members = new ArrayList<>();
-
-			for (Reagent reagent : Reagent.values()) {
-				if (reagent.category() == category) {
-					members.add(reagent);
-				}
-			}
-
-			group.add(new ReagentRow(members));
-			group.add(new Space(6));
-			blocks.add(new Block(group));
+		for (int i = 0; i < tried.size(); i += 4) {
+			blocks.add(single(new ReagentRow(tried.subList(i, Math.min(tried.size(), i + 4)))));
 		}
 
 		return blocks;
+	}
+
+	/** "raw, ground" etc.: the preparations of this reagent that were tried. */
+	private MutableComponent triedForms(Reagent reagent) {
+		MutableComponent forms = Component.empty();
+		boolean first = true;
+
+		for (Form form : Form.values()) {
+			if (knows("tried:" + reagent.name() + ":" + form.name())) {
+				if (!first) {
+					forms.append(", ");
+				}
+
+				forms.append(form.msg().component());
+				first = false;
+			}
+		}
+
+		return forms;
 	}
 
 	private List<Block> findings() {

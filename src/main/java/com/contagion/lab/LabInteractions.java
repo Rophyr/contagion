@@ -309,7 +309,7 @@ public final class LabInteractions {
 		long now = Lab.now(server);
 		give(player, Lab.culture(new CultureData(sample.source(), sample.load(), sample.day(), now, grows), now));
 		Vanilla.playSound(level, player, "item.bottle.empty", 0.6F, 1.6F);
-		Chat.bar(player, Msg.of("contagion.hint.inoculated", sample.source(), ContagionConfig.cultureGrowTicks / 1200), ChatFormatting.AQUA);
+		Chat.bar(player, Msg.of("contagion.hint.inoculated", sample.source()), ChatFormatting.AQUA);
 	}
 
 	private static void describeCulture(ServerPlayer player, ItemStack stack) {
@@ -347,7 +347,9 @@ public final class LabInteractions {
 		}
 
 		off.shrink(1);
+		Lab.noteTried(level.getServer(), ingredient);
 		Ingredient ground = new Ingredient(ingredient.reagent(), Form.GROUND);
+		Lab.noteTried(level.getServer(), ground);
 		give(player, Lab.prepared(ground));
 		Vanilla.playSound(level, player, "block.grindstone.use", 0.6F, 1.4F);
 		Chat.bar(player, Msg.of("contagion.hint.ground", ground.msg()), ChatFormatting.GRAY);
@@ -363,6 +365,7 @@ public final class LabInteractions {
 
 		vial.shrink(1);
 		player.getOffhandItem().shrink(1);
+		Lab.noteTried(level.getServer(), ingredient);
 
 		ItemStack serum = new ItemStack(ModItems.SERUM);
 		Lab.updateSerumStack(serum, new SerumMix(List.of(ingredient.encode()), false));
@@ -390,6 +393,7 @@ public final class LabInteractions {
 		}
 
 		player.getOffhandItem().shrink(1);
+		Lab.noteTried(level.getServer(), ingredient);
 		Lab.updateSerumStack(stack, mix.with(ingredient.encode()));
 		Vanilla.playSound(level, player, "item.bottle.fill", 0.8F, 1.2F);
 		Chat.bar(player, Msg.of("contagion.hint.mixture_added", ingredient.msg(), mix.reagents().size() + 1, SerumMix.MAX_REAGENTS), ChatFormatting.GRAY);

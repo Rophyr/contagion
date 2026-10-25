@@ -120,12 +120,14 @@ public final class Beaker {
 		}
 
 		main.shrink(1);
+		Lab.noteTried(server, ingredient);
 		Ingredient extract = new Ingredient(ingredient.reagent(), Form.EXTRACT);
+		Lab.noteTried(server, extract);
 		Strains.setResearch(server, research.withPending(new PendingTest(LabJobs.dimension(level), pos.asLong(), now + ContagionConfig.boilTicks,
 				PendingTest.BOIL, PendingTest.NO_SAMPLE, List.of(extract.encode()), false)));
 		BeakerBlock.setContents(level, pos, BeakerBlock.BOILING);
 		Vanilla.playSound(level, x, y, z, "block.brewing_stand.brew", SoundSource.BLOCKS, 0.8F, 0.8F);
-		Chat.bar(player, Msg.of("contagion.beaker.started", ingredient.reagent().msg(), ContagionConfig.boilTicks / 20), ChatFormatting.AQUA);
+		Chat.bar(player, Msg.of("contagion.beaker.started", ingredient.reagent().msg()), ChatFormatting.AQUA);
 	}
 
 	private static boolean hasHeat(ServerLevel level, BlockPos pos) {
