@@ -26,6 +26,7 @@ import com.contagion.disease.Form;
 import com.contagion.disease.Reagent;
 import com.contagion.lab.Journal;
 import com.contagion.lab.Lab;
+import com.contagion.lab.Microscope;
 import com.contagion.network.JournalPayload;
 import com.contagion.registry.ModItems;
 import com.contagion.text.Msg;
@@ -122,9 +123,11 @@ public final class JournalScreen extends Screen {
 		@Override
 		public void draw(GuiGraphicsExtractor graphics, int x, int y, int mouseX, int mouseY) {
 			Font font = Minecraft.getInstance().font;
+			// Shrink long titles (e.g. in French) to fit the page.
+			float scale = Math.min(this.scale, (PAGE_W - 4) / (float) Math.max(1, font.width(this.text)));
 			graphics.pose().pushMatrix();
-			graphics.pose().translate(x + PAGE_W / 2.0F, y);
-			graphics.pose().scale(this.scale, this.scale);
+			graphics.pose().translate(x + PAGE_W / 2.0F, y + (this.scale - scale) * 5);
+			graphics.pose().scale(scale, scale);
 			graphics.text(font, this.text, -font.width(this.text) / 2, 0, INK, false);
 			graphics.pose().popMatrix();
 		}
@@ -290,7 +293,7 @@ public final class JournalScreen extends Screen {
 		blocks.add(paragraph(styled("contagion.journal.reagents_hint", ChatFormatting.DARK_GRAY), 0));
 		blocks.add(paragraph(Component.literal("☠ ").append(styled("contagion.book.legend.toxic")).withStyle(ChatFormatting.DARK_RED), 0));
 		blocks.add(paragraph(Component.literal("✗ ").append(styled("contagion.book.legend.inert")).withStyle(ChatFormatting.DARK_GRAY), 0));
-		blocks.add(paragraph(Component.literal("★ ").append(styled("contagion.book.legend.active")).withStyle(ChatFormatting.GOLD), 0));
+		blocks.add(paragraph(Component.literal("★ ").append(styled("contagion.book.legend.active")).withColor(Microscope.DARK_GOLD), 0));
 		blocks.add(single(new Space(8)));
 
 		for (Reagent.Category category : Reagent.Category.values()) {
@@ -298,10 +301,11 @@ public final class JournalScreen extends Screen {
 			MutableComponent header = Component.empty();
 
 			if (active) {
-				header.append(Component.literal("★ ").withStyle(ChatFormatting.GOLD));
+				header.append(Component.literal("★ ").withColor(Microscope.DARK_GOLD));
 			}
 
-			header.append(category.msg().styled(active ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
+			header.append(active ? category.msg().styled(ChatFormatting.BOLD).withColor(Microscope.DARK_GOLD)
+					: category.msg().styled(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
 			List<Element> group = new ArrayList<>(paragraph(header, 0).elements());
 
 			for (Form form : Form.values()) {

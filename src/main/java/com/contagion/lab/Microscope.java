@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,6 +55,9 @@ public final class Microscope {
 	public static final int BUTTON_EXAMINE = 1;
 
 	/** The last result of each microscope, so it can be looked at again until the next job starts. */
+	/** Gold that is still readable on paper. */
+	public static final int DARK_GOLD = 0x9A6400;
+
 	private static final Map<String, MicroscopePayload> LAST_RESULT = new ConcurrentHashMap<>();
 
 	private Microscope() {
@@ -236,10 +240,10 @@ public final class Microscope {
 		} else if (!detected) {
 			if (sample.immune() && strain != null) {
 				report.flags |= MicroscopePayload.ANTIBODIES;
-				report.say(player, Msg.of("contagion.microscope.antibodies"), ChatFormatting.DARK_GREEN);
+				report.say(player, Msg.of("contagion.microscope.antibodies"), ChatFormatting.GREEN);
 				logResult = Msg.of("contagion.log.result.antibodies");
 			} else {
-				report.say(player, Msg.of("contagion.microscope.negative"), ChatFormatting.DARK_GREEN);
+				report.say(player, Msg.of("contagion.microscope.negative"), ChatFormatting.GREEN);
 				logResult = Msg.of("contagion.log.result.negative");
 			}
 
@@ -275,7 +279,7 @@ public final class Microscope {
 				if (finding != null && description != null) {
 					research = research.withFinding(finding).withFinding(donorKey);
 					report.flags |= MicroscopePayload.INSIGHT;
-					report.say(player, Msg.of("contagion.microscope.insight", description), ChatFormatting.DARK_PURPLE);
+					report.say(player, Msg.of("contagion.microscope.insight", description), ChatFormatting.YELLOW);
 					logResult = Msg.of("contagion.log.result.positive_insight", Disease.loadMsg(sample.load()));
 				} else {
 					report.say(player, Msg.of("contagion.microscope.no_insight"), ChatFormatting.GRAY);
@@ -310,15 +314,15 @@ public final class Microscope {
 			report.flags |= MicroscopePayload.POSITIVE;
 
 			report.say(player, Msg.of("contagion.culture.efficacy." + Math.min(3, active)),
-					active >= 3 ? ChatFormatting.DARK_GREEN : active > 0 ? ChatFormatting.GOLD : ChatFormatting.GRAY);
+					active >= 3 ? ChatFormatting.GREEN : active > 0 ? ChatFormatting.YELLOW : ChatFormatting.GRAY);
 
 			// A right reagent in the wrong preparation leaves a hint, but no count.
 			if (trace > 0 && active < 3) {
 				report.flags |= MicroscopePayload.TRACE;
-				report.say(player, Msg.of("contagion.culture.trace"), ChatFormatting.DARK_PURPLE);
+				report.say(player, Msg.of("contagion.culture.trace"), ChatFormatting.LIGHT_PURPLE);
 			}
 
-			report.say(player, Msg.of("contagion.culture.tissue." + Math.min(2, toxic)), toxic == 0 ? ChatFormatting.DARK_GREEN : ChatFormatting.RED);
+			report.say(player, Msg.of("contagion.culture.tissue." + Math.min(2, toxic)), toxic == 0 ? ChatFormatting.GREEN : ChatFormatting.RED);
 			logResult = Msg.of(trace > 0 && active < 3 ? "contagion.log.result.culture_trace" : "contagion.log.result.culture",
 					Msg.of("contagion.log.efficacy." + Math.min(3, active)), Msg.of("contagion.log.tissue." + Math.min(2, toxic)));
 		}
@@ -353,19 +357,19 @@ public final class Microscope {
 			this.lines.add(text.styled(ChatFormatting.DARK_AQUA, ChatFormatting.BOLD));
 		}
 
-		/** Chat uses lighter colors than the paper of the result panel, so both get their own. */
-		void say(ServerPlayer player, Msg text, ChatFormatting paperColor) {
-			Chat.send(player, text, chatColor(paperColor));
-			this.lines.add(text.styled(paperColor));
-		}
-
-		private static ChatFormatting chatColor(ChatFormatting paper) {
-			return switch (paper) {
-				case DARK_GREEN -> ChatFormatting.GREEN;
-				case DARK_PURPLE -> ChatFormatting.LIGHT_PURPLE;
-				case DARK_AQUA -> ChatFormatting.AQUA;
-				default -> paper;
-			};
+		/** Chat gets the bright color; the result panel (paper) gets a darker one that reads well on it. */
+		void say(ServerPlayer player, Msg text, ChatFormatting chatColor) {
+			Chat.send(player, text, chatColor);
+			MutableComponent paper = text.component();
+			this.lines.add(switch (chatColor) {
+				case GREEN -> paper.withStyle(ChatFormatting.DARK_GREEN);
+				case LIGHT_PURPLE -> paper.withStyle(ChatFormatting.DARK_PURPLE);
+				case AQUA -> paper.withStyle(ChatFormatting.DARK_AQUA);
+				case RED -> paper.withStyle(ChatFormatting.DARK_RED);
+				case GOLD, YELLOW -> paper.withColor(DARK_GOLD);
+				case GRAY -> paper.withStyle(ChatFormatting.DARK_GRAY);
+				default -> paper.withStyle(chatColor);
+			});
 		}
 
 		MicroscopePayload payload() {

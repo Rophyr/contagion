@@ -132,6 +132,29 @@ public final class ContagionClientGameTest implements FabricClientGameTest {
 
 			context.setScreen(() -> null);
 
+			// ---- Same screens in French (longer text)
+			context.runOnClient(minecraft -> {
+				minecraft.options.languageCode = "fr_fr";
+				minecraft.getLanguageManager().setSelected("fr_fr");
+				minecraft.reloadResourcePacks();
+			});
+			context.waitTicks(100);
+			game.getServer().runOnServer(server -> Journal.open(server, player(server)));
+			context.waitForScreen(JournalScreen.class);
+
+			for (int tab : new int[] {0, 1, 2}) {
+				context.runOnClient(minecraft -> ((JournalScreen) minecraft.gui.screen()).selectTab(tab));
+				context.waitTicks(3);
+				context.takeScreenshot("2" + tab + "_fr_journal_tab" + tab);
+			}
+
+			context.setScreen(() -> null);
+			game.getServer().runOnServer(server -> Microscope.use(player(server).level(), player(server), microscope));
+			context.waitForScreen(MicroscopeScreen.class);
+			context.waitTicks(5);
+			context.takeScreenshot("23_fr_microscope_result");
+			context.setScreen(() -> null);
+
 			// ---- World infection: how many freshly spawned farm animals carry it?
 			int carriers = game.getServer().computeOnServer(server -> {
 				ServerPlayer player = player(server);
