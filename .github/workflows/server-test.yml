@@ -1,0 +1,46 @@
+name: server-test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x ./gradlew
+      - name: Start a dedicated server with the mod and create a world
+        run: |
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+          printf "online-mode=false\nlevel-seed=contagion\n" > run/server.properties
+          (timeout 420 ./gradlew runServer --console=plain > server.log 2>&1 || true) &
+          for i in $(seq 1 84); do
+            if grep -q "Done (" server.log 2>/dev/null; then echo "SERVER STARTED"; break; fi
+            if grep -qE "Failed to start|Exception in server tick loop|Encountered an unexpected exception|BUILD FAILED" server.log 2>/dev/null; then echo "SERVER FAILED"; break; fi
+            sleep 5
+          done
+          sleep 5
+          pkill -f "net.fabricmc" || true
+          pkill -f "KnotServer" || true
+          wait || true
+          echo "----- summary -----"
+          grep -nE "Done \(|ERROR|WARN.*contagion|Exception|Caused by|at com\.contagion|Failed|Couldn't|Unknown|Invalid" server.log | head -80 > summary.txt || true
+          cat summary.txt
+          # Report as annotations so they're readable through the API
+          python3 - <<'PY'
+          lines = open("summary.txt").read().splitlines()
+          chunks = [lines[i:i + 12] for i in range(0, min(len(lines), 120), 12)] or [["no errors found"]]
+          for chunk in chunks[:10]:
+              msg = "%0A".join(l.replace("%", "%25").replace("\r", "")[:300] for l in chunk)
+              print(f"::warning title=server-log::{msg}")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: server-log
+          path: server.log
