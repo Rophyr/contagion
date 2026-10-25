@@ -50,7 +50,8 @@ jobs:
           	}
           }
           G
-          ./gradlew printCompileClasspath --console=plain -q | grep '^CP=' | sed 's/^CP=//' > cp.txt
+          ./gradlew printCompileClasspath --no-configuration-cache --console=plain -q | grep '^CP=' | sed 's/^CP=//' > cp.txt
+          echo "classpath entries: $(tr ":" "\n" < cp.txt | wc -l)"
           javap -cp "$(cat cp.txt)" -public "$CLASS" > probe.txt 2>&1 || true
           if [ -n "$FILTER" ]; then grep -E "class |interface |enum |record |$FILTER" probe.txt > f.txt || true; mv f.txt probe.txt; fi
           cat probe.txt
