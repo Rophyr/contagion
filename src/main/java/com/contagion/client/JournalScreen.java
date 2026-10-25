@@ -277,7 +277,7 @@ public final class JournalScreen extends Screen {
 		List<Reagent> tried = new ArrayList<>();
 
 		for (Reagent reagent : Reagent.values()) {
-			if (triedForms(reagent).length() > 0) {
+			if (!triedForms(reagent).getSiblings().isEmpty()) {
 				tried.add(reagent);
 			}
 		}

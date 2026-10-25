@@ -28,6 +28,7 @@ import com.contagion.disease.Disease;
 import com.contagion.disease.Form;
 import com.contagion.disease.Ingredient;
 import com.contagion.disease.Reagent;
+import com.contagion.disease.Strains;
 import com.contagion.registry.ModComponents;
 import com.contagion.registry.ModItems;
 import com.contagion.text.Msg;
