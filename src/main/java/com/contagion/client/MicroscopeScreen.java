@@ -54,7 +54,7 @@ public final class MicroscopeScreen extends AbstractContainerScreen<MicroscopeMe
 		view = payload;
 		viewTime = minecraft.level == null ? 0 : minecraft.level.getGameTime();
 
-		if (minecraft.screen instanceof MicroscopeScreen screen) {
+		if (minecraft.gui.screen() instanceof MicroscopeScreen screen) {
 			screen.scroll = 0;
 		}
 	}

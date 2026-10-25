@@ -19,7 +19,7 @@ public final class ContagionClient implements ClientModInitializer {
 		MenuScreens.register(ModMenus.MICROSCOPE, MicroscopeScreen::new);
 
 		ClientPlayNetworking.registerGlobalReceiver(MicroscopePayload.TYPE, (payload, context) -> MicroscopeScreen.receive(payload));
-		ClientPlayNetworking.registerGlobalReceiver(JournalPayload.TYPE, (payload, context) -> context.client().setScreen(new JournalScreen(payload)));
+		ClientPlayNetworking.registerGlobalReceiver(JournalPayload.TYPE, (payload, context) -> context.client().gui.setScreen(new JournalScreen(payload)));
 		ClientPlayNetworking.registerGlobalReceiver(ThermometerPayload.TYPE, (payload, context) -> ThermometerHud.receive(payload));
 
 		HudElementRegistry.attachElementAfter(VanillaHudElements.CROSSHAIR, ContagionMod.id("thermometer"), ThermometerHud::extract);
