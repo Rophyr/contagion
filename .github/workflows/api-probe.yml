@@ -11,6 +11,10 @@ on:
         description: "Optional regex to filter member lines"
         required: false
         default: ""
+      find:
+        description: "Optional regex: list classes on the classpath whose path matches"
+        required: false
+        default: ""
 
 jobs:
   split:
@@ -52,8 +56,18 @@ jobs:
           G
           ./gradlew printCompileClasspath --no-configuration-cache --console=plain -q | grep '^CP=' | sed 's/^CP=//' > cp.txt
           echo "classpath entries: $(tr ":" "\n" < cp.txt | wc -l)"
-          javap -cp "$(cat cp.txt)" -public "$CLASS" > probe.txt 2>&1 || true
+          javap -cp "$(cat cp.txt)" -protected "$CLASS" > probe.txt 2>&1 || true
           if [ -n "$FILTER" ]; then grep -E "class |interface |enum |record |$FILTER" probe.txt > f.txt || true; mv f.txt probe.txt; fi
           cat probe.txt
           python3 .github/scripts/annotate.py probe.txt "$CLASS" warning 40 10
           tail -n +401 probe.txt > rest.txt; python3 .github/scripts/annotate.py rest.txt "$CLASS" notice 40 10
+      - name: find
+        if: ${{ github.event.inputs.find != '' && strategy.job-index == 0 }}
+        env:
+          FIND: ${{ github.event.inputs.find }}
+        run: |
+          for jar in $(tr ":" " " < cp.txt); do
+            case "$jar" in *.jar) unzip -Z1 "$jar" 2>/dev/null | grep '\.class$' | grep -v '\$' | grep -E "$FIND" || true;; esac
+          done | sed 's/\.class$//;s#/#.#g' | sort -u > found.txt
+          wc -l found.txt
+          python3 .github/scripts/annotate.py found.txt "find" warning 40 10
