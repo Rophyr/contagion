@@ -31,14 +31,7 @@ jobs:
           echo "----- summary -----"
           grep -nE "Done \(|ERROR|WARN.*contagion|Exception|Caused by|at com\.contagion|Failed|Couldn't|Unknown|Invalid" server.log | head -80 > summary.txt || true
           cat summary.txt
-          # Report as annotations so they're readable through the API
-          python3 - <<'PY'
-          lines = open("summary.txt").read().splitlines()
-          chunks = [lines[i:i + 12] for i in range(0, min(len(lines), 120), 12)] or [["no errors found"]]
-          for chunk in chunks[:10]:
-              msg = "%0A".join(l.replace("%", "%25").replace("\r", "")[:300] for l in chunk)
-              print(f"::warning title=server-log::{msg}")
-          PY
+          python3 .github/scripts/annotate.py summary.txt server-log warning 12 10
       - uses: actions/upload-artifact@v4
         if: always()
         with:

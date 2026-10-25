@@ -13,7 +13,18 @@ jobs:
           java-version: 25
       - uses: gradle/actions/setup-gradle@v4
       - run: chmod +x ./gradlew
-      - run: ./gradlew build
+      - name: Build
+        run: |
+          set +e
+          ./gradlew build --console=plain > build.log 2>&1
+          status=$?
+          cat build.log
+          if [ $status -ne 0 ]; then
+            # Compiler errors as annotations (readable through the GitHub API)
+            grep -nE "error:|warning: \[removal\]|FAILURE|What went wrong" -A 4 build.log | head -400 > errors.txt
+            python3 .github/scripts/annotate.py errors.txt compile error 25 10
+          fi
+          exit $status
       - uses: actions/upload-artifact@v4
         with:
           name: contagion-mod

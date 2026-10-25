@@ -1,0 +1,50 @@
+name: api-probe
+
+# Prints public signatures of Minecraft classes (javap) as annotations, to check APIs while developing.
+on:
+  workflow_dispatch:
+    inputs:
+      classes:
+        description: "Space-separated fully qualified class names"
+        required: true
+      grep:
+        description: "Optional regex to filter member lines"
+        required: false
+        default: ""
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x ./gradlew
+      - name: Resolve classpath
+        run: |
+          cat >> build.gradle <<'G'
+
+          tasks.register("printCompileClasspath") {
+          	doLast {
+          		println "CP=" + sourceSets.main.compileClasspath.asPath
+          	}
+          }
+          G
+          ./gradlew printCompileClasspath --console=plain -q | grep '^CP=' | sed 's/^CP=//' > cp.txt
+          wc -c cp.txt
+      - name: javap
+        env:
+          CLASSES: ${{ github.event.inputs.classes }}
+          FILTER: ${{ github.event.inputs.grep }}
+        run: |
+          CP=$(cat cp.txt)
+          for c in $CLASSES; do
+            out=$(javap -cp "$CP" -public "$c" 2>&1)
+            if [ -n "$FILTER" ]; then out=$(echo "$out" | grep -E "class |interface |enum |record |$FILTER"); fi
+            echo "$out"
+            echo "$out" > probe.txt
+            python3 .github/scripts/annotate.py probe.txt "$c" warning 40 10
+          done
