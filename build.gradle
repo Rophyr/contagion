@@ -45,3 +45,14 @@ jar {
 		rename { "${it}_$projectName" }
 	}
 }
+
+// Client game test (src/gametest): opens the mod's screens in a real client and takes screenshots.
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "contagion-gametest"
+		enableGameTests = false
+		enableClientGameTests = true
+		eula = true
+	}
+}

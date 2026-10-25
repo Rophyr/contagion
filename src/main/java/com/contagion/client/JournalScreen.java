@@ -494,6 +494,15 @@ public final class JournalScreen extends Screen {
 		graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, u, 200, 18, 11, 512, 256);
 	}
 
+	/** Opens a bookmark tab (also used by the client game test). */
+	public void selectTab(int index) {
+		if (index >= 0 && index < TABS.length && index != this.tab) {
+			this.tab = index;
+			lastTab = index;
+			pageSound();
+		}
+	}
+
 	private void turn(int delta) {
 		int target = Math.max(0, Math.min(spreadCount() - 1, this.spread[this.tab] + delta));
 
@@ -518,12 +527,7 @@ public final class JournalScreen extends Screen {
 			int x = tabX(i);
 
 			if (mx >= x && mx < x + TAB_W && my >= this.bookY - 22 && my < this.bookY) {
-				if (i != this.tab) {
-					this.tab = i;
-					lastTab = i;
-					pageSound();
-				}
-
+				selectTab(i);
 				return true;
 			}
 		}

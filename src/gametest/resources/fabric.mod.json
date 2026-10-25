@@ -1,0 +1,15 @@
+{
+	"schemaVersion": 1,
+	"id": "contagion-gametest",
+	"version": "1.0.0",
+	"name": "Contagion client game test",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-client-gametest": [
+			"com.contagion.test.ContagionClientGameTest"
+		]
+	},
+	"depends": {
+		"contagion": "*"
+	}
+}
