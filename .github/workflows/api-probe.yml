@@ -13,8 +13,22 @@ on:
         default: ""
 
 jobs:
-  probe:
+  split:
     runs-on: ubuntu-latest
+    outputs:
+      classes: ${{ steps.split.outputs.classes }}
+    steps:
+      - id: split
+        env:
+          CLASSES: ${{ github.event.inputs.classes }}
+        run: echo "classes=$(python3 -c 'import json,os;print(json.dumps(os.environ["CLASSES"].split()))')" >> "$GITHUB_OUTPUT"
+  probe:
+    needs: split
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        class: ${{ fromJson(needs.split.outputs.classes) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -23,7 +37,10 @@ jobs:
           java-version: 25
       - uses: gradle/actions/setup-gradle@v4
       - run: chmod +x ./gradlew
-      - name: Resolve classpath
+      - name: javap
+        env:
+          CLASS: ${{ matrix.class }}
+          FILTER: ${{ github.event.inputs.grep }}
         run: |
           cat >> build.gradle <<'G'
 
@@ -34,17 +51,8 @@ jobs:
           }
           G
           ./gradlew printCompileClasspath --console=plain -q | grep '^CP=' | sed 's/^CP=//' > cp.txt
-          wc -c cp.txt
-      - name: javap
-        env:
-          CLASSES: ${{ github.event.inputs.classes }}
-          FILTER: ${{ github.event.inputs.grep }}
-        run: |
-          CP=$(cat cp.txt)
-          for c in $CLASSES; do
-            out=$(javap -cp "$CP" -public "$c" 2>&1)
-            if [ -n "$FILTER" ]; then out=$(echo "$out" | grep -E "class |interface |enum |record |$FILTER"); fi
-            echo "$out"
-            echo "$out" > probe.txt
-            python3 .github/scripts/annotate.py probe.txt "$c" warning 40 10
-          done
+          javap -cp "$(cat cp.txt)" -public "$CLASS" > probe.txt 2>&1 || true
+          if [ -n "$FILTER" ]; then grep -E "class |interface |enum |record |$FILTER" probe.txt > f.txt || true; mv f.txt probe.txt; fi
+          cat probe.txt
+          python3 .github/scripts/annotate.py probe.txt "$CLASS" warning 40 10
+          tail -n +401 probe.txt > rest.txt; python3 .github/scripts/annotate.py rest.txt "$CLASS" notice 40 10
