@@ -20,7 +20,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
@@ -92,24 +94,24 @@ public final class ModItems {
 		return Registry.register(BuiltInRegistries.ITEM, key, factory.apply(properties.apply(new Item.Properties()).setId(key)));
 	}
 
-	/** Looks, stacks and tastes like the vanilla item (same name, model and food values). */
+	/** Looks and tastes like the vanilla item (same name, model and food values). */
 	private static Item registerTainted(String vanillaName) {
 		Item vanilla = BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace(vanillaName));
-		FoodProperties food = vanilla.components().get(DataComponents.FOOD);
-		Consumable consumable = vanilla.components().get(DataComponents.CONSUMABLE);
-		return register("tainted_" + vanillaName, TaintedFoodItem::new, p -> {
-			p.overrideDescription(vanilla.getDescriptionId());
-
-			if (food != null) {
-				p.component(DataComponents.FOOD, food);
-			}
-
-			if (consumable != null) {
-				p.component(DataComponents.CONSUMABLE, consumable);
-			}
-
-			return p;
-		});
+		FoodProperties food = switch (vanillaName) {
+			case "beef" -> Foods.BEEF;
+			case "cooked_beef" -> Foods.COOKED_BEEF;
+			case "porkchop" -> Foods.PORKCHOP;
+			case "cooked_porkchop" -> Foods.COOKED_PORKCHOP;
+			case "mutton" -> Foods.MUTTON;
+			case "cooked_mutton" -> Foods.COOKED_MUTTON;
+			case "chicken" -> Foods.CHICKEN;
+			case "cooked_chicken" -> Foods.COOKED_CHICKEN;
+			case "rabbit" -> Foods.RABBIT;
+			default -> Foods.COOKED_RABBIT;
+		};
+		// Raw chicken keeps its chance of food poisoning.
+		Consumable consumable = vanillaName.equals("chicken") ? Consumables.CHICKEN : Consumables.DEFAULT_FOOD;
+		return register("tainted_" + vanillaName, TaintedFoodItem::new, p -> p.overrideDescription(vanilla.getDescriptionId()).food(food, consumable));
 	}
 
 	private static Item registerBlockItem(ResourceKey<Block> blockKey, Block block, String name) {
